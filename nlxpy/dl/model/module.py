@@ -88,6 +88,29 @@ class ConvBlock(nn.Module):
         """
         return self.model(x)
 
+@m.register("Flatten", note="Flatten Layer")
+class Flatten(nn.Module):
+    """
+    Flatten layer to convert multi-dimensional input to 1D.
+    """
+
+    def __init__(self, use_nn=False):
+        super(Flatten, self).__init__()
+        self.use_nn = use_nn
+        if use_nn:
+            self.flatten = nn.Flatten()
+            
+
+    def forward(self, x):
+        """
+        Forward pass of the Flatten layer.
+        :param x: Input tensor.
+        :return: Flattened tensor.
+        """
+        if self.use_nn:
+            return self.flatten(x)
+        else:
+            return x.view(x.size(0), -1)
 
 if __name__ == "__main__":
     logging.basicConfig(

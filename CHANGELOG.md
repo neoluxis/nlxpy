@@ -14,6 +14,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Create basic skeletons of deep learning modules \[dl\]
 - Add registration and unregistration for models \[dl\]
 - Add somple module: MLP and Conv2d Block \[dl\]
+- add a basic template for model definition yaml, may need more modifications \[dl\]
 
 <!-- 
 指导原则

@@ -24,7 +24,7 @@ class Model:
     Model registration and management class.
     """
 
-    __MODULE_REGISTRY: dict = {}
+    __module_registry: dict = {}
 
     def __init__(self, *args, **kwargs):
         pass
@@ -34,9 +34,9 @@ class Model:
         """Register the model with a given name."""
 
         def register_model(mcls):
-            if name in cls.__MODULE_REGISTRY:
+            if name in cls.__module_registry:
                 raise ValueError(f"Model '{name}' is already registered.")
-            cls.__MODULE_REGISTRY[name] = (mcls, note if note else mcls.__name__)
+            cls.__module_registry[name] = (mcls, note if note else mcls.__name__)
             logging.debug(f"Model '{name}' registered successfully.")
             return cls
 
@@ -45,8 +45,8 @@ class Model:
     @classmethod
     def unregister(cls, name: str) -> bool:
         """Unregister the model with a given name."""
-        if name in cls.__MODULE_REGISTRY:
-            del cls.__MODULE_REGISTRY[name]
+        if name in cls.__module_registry:
+            del cls.__module_registry[name]
             logging.debug(f"Model '{name}' unregistered successfully.")
             return True
         else:
@@ -62,16 +62,16 @@ class Model:
         """
         if proc:
             ret = []
-            for name, (mcls, note) in cls.__MODULE_REGISTRY.items():
+            for name, (mcls, note) in cls.__module_registry.items():
                 ret.append({"name": name, "desc": note})
             return ret
         else:
-            if not cls.__MODULE_REGISTRY:
+            if not cls.__module_registry:
                 print("No models registered.")
             else:
                 print("Registered models:")
                 for idx, (name, (mcls, note)) in enumerate(
-                    cls.__MODULE_REGISTRY.items()
+                    cls.__module_registry.items()
                 ):
                     print(f"{idx + 1}. {name} - {note}")
             return None
