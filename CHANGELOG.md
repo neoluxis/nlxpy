@@ -13,6 +13,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Arbitrary direction gray transform of image \[cv\]
 - Create basic skeletons of deep learning modules \[dl\]
 - Add registration and unregistration for models \[dl\]
+- Add somple module: MLP and Conv2d Block \[dl\]
 
 <!-- 
 指导原则

@@ -1,52 +1,87 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-nlxpy.dl.models.model
+nlxpy.dl.model.model
 ========
 
 Desc: Model factory and register for deep learning models.
+
 Author: Neolux Lee
+
 Date: 2025-06-13
+
 Email: neolux_lee@outlook.com
+
 Ver: 0.0.1
 """
 import os
 from typing import Callable
-
-
-MODULE_REGISTRY: dict = {}
+import logging
 
 
 class Model:
+    """
+    Model registration and management class.
+    """
+
+    __MODULE_REGISTRY: dict = {}
+
     def __init__(self, *args, **kwargs):
         pass
 
     @classmethod
-    def register(cls, name:str) -> Callable:
+    def register(cls, name: str, note: str | None = None) -> Callable:
         """Register the model with a given name."""
 
         def register_model(mcls):
-            if name in MODULE_REGISTRY:
+            if name in cls.__MODULE_REGISTRY:
                 raise ValueError(f"Model '{name}' is already registered.")
-            MODULE_REGISTRY[name] = mcls
+            cls.__MODULE_REGISTRY[name] = (mcls, note if note else mcls.__name__)
+            logging.debug(f"Model '{name}' registered successfully.")
             return cls
 
         return register_model
 
     @classmethod
-    def unregister(cls, name: str) -> Callable:
+    def unregister(cls, name: str) -> bool:
         """Unregister the model with a given name."""
+        if name in cls.__MODULE_REGISTRY:
+            del cls.__MODULE_REGISTRY[name]
+            logging.debug(f"Model '{name}' unregistered successfully.")
+            return True
+        else:
+            logging.warning(f"Model '{name}' not found in registry.")
+            return False
 
-        def unregister_model():
-            if name not in MODULE_REGISTRY:
-                raise ValueError(f"Model '{name}' is not registered.")
-            del MODULE_REGISTRY[name]
-            return cls
+    @classmethod
+    def get_registered_models(cls, proc=False) -> list | None:
+        """
+        Get a list of all registered models.
 
-        return unregister_model
+        :param proc: If True, return a list for following processing. If False, print it out
+        """
+        if proc:
+            ret = []
+            for name, (mcls, note) in cls.__MODULE_REGISTRY.items():
+                ret.append({"name": name, "desc": note})
+            return ret
+        else:
+            if not cls.__MODULE_REGISTRY:
+                print("No models registered.")
+            else:
+                print("Registered models:")
+                for idx, (name, (mcls, note)) in enumerate(
+                    cls.__MODULE_REGISTRY.items()
+                ):
+                    print(f"{idx + 1}. {name} - {note}")
+            return None
 
 
 if __name__ == "__main__":
+    logging.basicConfig(
+        level=logging.DEBUG, format="%(asctime)s - %(levelname)s - %(message)s"
+    )
+
     # Example usage
     @Model.register("example_model")
     class ExampleModel(Model):
@@ -54,14 +89,14 @@ if __name__ == "__main__":
             super().__init__(*args, **kwargs)
             print("ExampleModel initialized.")
 
-    print(f"Current registered models: {MODULE_REGISTRY.keys()}")
+    Model.get_registered_models(proc=False)
 
     # Access the registered model
-    model_instance = MODULE_REGISTRY["example_model"]()
-    print(f"Registered model: {model_instance.__class__.__name__}")
+    # model_instance = Model.__MODULE_REGISTRY["example_model"]()
+    # print(f"Registered model: {model_instance.__class__.__name__}")
 
     # Unregister the model
     Model.unregister("example_model")
     print("Model 'example_model' unregistered.")
 
-    print(f"Current registered models: {MODULE_REGISTRY.keys()}")
+    Model.get_registered_models(proc=False)
