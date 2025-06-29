@@ -1,21 +1,5 @@
 # Changelog
 
-All notable changes to this project (NlxPy) will be documented here.
-
-The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
-and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
-
-## [0.0.01] - 2025-06-12
-
-### Added
-
-- Dependency checker and installer \[misc\]
-- Arbitrary direction gray transform of image \[cv\]
-- Create basic skeletons of deep learning modules \[dl\]
-- Add registration and unregistration for models \[dl\]
-- Add somple module: MLP and Conv2d Block \[dl\]
-- add a basic template for model definition yaml, may need more modifications \[dl\]
-
 <!-- 
 指导原则
     记住日志是写给人而非机器的。
@@ -33,3 +17,33 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
     Fixed 对 bug 的修复。
     Security 对安全性的改进。
  -->
+
+All notable changes to this project (NlxPy) will be documented here.
+
+The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
+and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
+
+## [0.0.2] - 2025-06-29
+
+### Added 
+
+- Experiment management: folder creation [misc]
+- Random seed mutator and accesor [dl]
+- Dependencies checker: add `requirements.txt` support [misc]
+
+### Changed 
+
+- Denpendencies checker: detect all deps and install together [misc]
+- General dependency update `numpy` 
+
+## [0.0.1] - 2025-06-12
+
+### Added
+
+- Dependency checker and installer [misc]
+- Arbitrary direction gray transform of image [cv]
+- Create basic skeletons of deep learning modules [dl]
+- Add registration and unregistration for models [dl]
+- Add somple module: MLP and Conv2d Block [dl]
+- add a basic template for model definition yaml, may need more modifications [dl]
+

@@ -1,6 +1,6 @@
 from setuptools import setup, find_packages
 
-deps = []
+deps = ['numpy']
 cv_deps = ["opencv-python-headless", "numpy", "pillow", "scikit-image"]
 misc_deps = []
 dl_deps = ["torch", "torchvision", "torchaudio", "tqdm", "numpy", "scikit-learn"]
