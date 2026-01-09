@@ -40,16 +40,25 @@ class MetaTransmit:
         try:
             data = self._rx_queue.get(block=block, timeout=timeout)
             self._buffer.extend(data)
-            if self._on_recv:
-                try:
-                    self._on_recv(self, self._context)
-                except Exception as e:
-                    print(f"[unitransmit] on_rx callback error: {e}")
+            # if self._on_recv:
+            #     try:
+            #         self._on_recv(self, self._context)
+            #     except Exception as e:
+            #         print(f"[unitransmit] on_rx callback error: {e}")
             return True
         except queue.Empty:
             return False
 
     def _enqueue_and_notify(self, data: bytes):
+        self._buffer.extend(data)
+        if self._on_recv:
+            try:
+                self._on_recv(self, self._context)
+            except Exception as e:
+                print(f"[unitransmit] on_recv callback error: {e}")
+
+    def _inject_rx(self, data: bytes):
+        """Inject received data into buffer and trigger callback"""
         self._buffer.extend(data)
         if self._on_recv:
             try:
@@ -101,6 +110,25 @@ class MetaTransmit:
         if isinstance(data, str):
             data = data.encode("utf-8")
         self.write(data + self._newline)
+
+
+class LoopbackTransmit(MetaTransmit):
+    """
+    Loopback / in-process transmit.
+    write() -> read()
+    """
+
+    def __init__(self, **kw):
+        super().__init__(**kw)
+        # 不需要 start / recv_loop
+
+    def write(self, data: bytes):
+        if not isinstance(data, (bytes, bytearray)):
+            raise TypeError("data must be bytes")
+        self._inject_rx(bytes(data))
+
+    def close(self):
+        self._running = False
 
 
 class SerialTransmit(MetaTransmit):
@@ -201,7 +229,9 @@ class UniTransmit:
     def __init__(self, interface: str, on_recv=None, context=None, **kwargs):
         interface = interface.lower()
 
-        if interface == "serial":
+        if interface in ("loop", "loopback"):
+            self._impl = LoopbackTransmit(on_recv=on_recv, context=context, **kwargs)
+        elif interface == "serial":
             self._impl = SerialTransmit(on_recv=on_recv, context=context, **kwargs)
         elif interface == "udp":
             self._impl = UDPTransmit(on_recv=on_recv, context=context, **kwargs)
