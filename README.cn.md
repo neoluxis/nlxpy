@@ -14,6 +14,8 @@ cd nlxpy
 pip install -e .
 # 如若安装某个模块
 pip install -e .[misc]
+# 直接不 clone 安装
+pip install git+https://github.com/neoluxis/nlxpy.git
 ```
 
 
