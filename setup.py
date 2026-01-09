@@ -1,8 +1,8 @@
 from setuptools import setup, find_packages
 
-deps = ['numpy']
+deps = ["numpy"]
 cv_deps = ["opencv-python-headless", "numpy", "pillow", "scikit-image"]
-misc_deps = []
+misc_deps = ["pyserial"]
 dl_deps = ["torch", "torchvision", "torchaudio", "tqdm", "numpy", "scikit-learn"]
 all_deps = cv_deps + misc_deps + dl_deps
 all_deps = list(set(all_deps))  # 去重
