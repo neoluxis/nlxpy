@@ -36,6 +36,9 @@ class MetaTransmit:
     def close(self):
         self._running = False
 
+    def in_waiting(self):
+        return len(self._buffer)
+    
     def _fill_buffer(self, block=True, timeout=None):
         try:
             data = self._rx_queue.get(block=block, timeout=timeout)
@@ -248,6 +251,9 @@ class UniTransmit:
 
     def readln(self) -> bytes:
         return self._impl.readln()
+    
+    def in_waiting(self) -> int:
+        return self._impl.in_waiting()
 
     def write(self, data: bytes):
         return self._impl.write(data)
